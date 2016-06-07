@@ -57,8 +57,7 @@ class GuessANumberApi(remote.Service):
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
         try:
-            game = Game.new_game(user.key, request.min,
-                                 request.max, request.attempts)
+            game = Game.new_game(user.key, request.attempts)
         except ValueError:
             raise endpoints.BadRequestException('Maximum must be greater '
                                                 'than minimum!')
@@ -67,7 +66,7 @@ class GuessANumberApi(remote.Service):
         # This operation is not needed to complete the creation of a new game
         # so it is performed out of sequence.
         taskqueue.add(url='/tasks/cache_average_attempts')
-        return game.to_form('Good luck playing Guess a Number!')
+        return game.to_form('Good luck playing Hangman!')
 
     @endpoints.method(request_message=GET_GAME_REQUEST,
                       response_message=GameForm,
@@ -94,18 +93,31 @@ class GuessANumberApi(remote.Service):
             return game.to_form('Game already over!')
 
         game.attempts_remaining -= 1
-        if request.guess == game.target:
-            game.end_game(True)
-            return game.to_form('You win!')
 
-        if request.guess < game.target:
-            msg = 'Too low!'
-        else:
-            msg = 'Too high!'
+        try:
+          index_var = game.remaining_letters.index(request.guess)
+          game.remaining_letters.pop(index_var)
+          msg = 'You got a letter!' 
+        except:
+          msg = 'Not a correct guess.'
 
-        if game.attempts_remaining < 1:
-            game.end_game(False)
-            return game.to_form(msg + ' Game over!')
+        # if request.guess == game.target:
+        #     game.end_game(True)
+        #     return game.to_form('You win!')
+
+        # if request.guess < game.target:
+        #     msg = 'Too low!'
+        # else:
+        #     msg = 'Too high!'
+
+        if len(game.remaining_letters) < 1:
+          game.end_game(True)
+          return game.to_form('You win!')        
+
+        elif game.attempts_remaining < 1:
+          game.end_game(False)
+          return game.to_form(msg + ' Game over!')
+        
         else:
             game.put()
             return game.to_form(msg)
