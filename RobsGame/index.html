@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hangman Game</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+<h1>Hangman Game</h1>
+<div class="hangman container">
+<div id="left-pane" class="box">
+  <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" class="hangman">
+   <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+   <g id="stand">
+    <title>stand</title>
+    <line fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="161" y1="25" x2="161" y2="49" id="svg_20"/>
+    <line fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="161" y1="26" x2="61" y2="28" id="svg_21"/>
+    <line fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="61" y1="26" x2="62" y2="316" id="svg_23"/>
+    <line fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="25" y1="315" x2="101" y2="315" id="svg_24"/>
+   </g>
+   <g id="head" display="none">
+    <title>head</title>
+    <ellipse fill="#fcf9f9" stroke="#000000" stroke-width="5" cx="160" cy="77" id="svg_1" rx="25" ry="26"/>
+    <path fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z" id="head-callout"/>
+    <text fill="#000000" stroke="#000000" stroke-width="0" stroke-linejoin="null" stroke-linecap="null" x="393.99318" y="49" font-size="24" font-family="serif" text-anchor="middle" xml:space="preserve" transform="matrix(0.605765700340271,0,0,0.7692307829856873,29.832448644563556,12.461537718772888) " id="head-quote">Awww, snaps!</text>
+   </g>
+   <g id="torso" display="none">
+    <title>torso</title>
+    <line fill="none" stroke="#000000" stroke-width="5" stroke-linejoin="null" stroke-linecap="null" x1="157" y1="100" x2="157" y2="190" id="svg_9"/>
+    <path id="svg_29" fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z"/>
+    <text transform="matrix(0.6984750206791664,0,0,0.7932947421408301,139.7171986131781,18.2273132379174) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" id="svg_31" y="41.77153" x="208" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">That dog won't hunt.</text>
+   </g>
+   <g id="rightarm" display="none">
+    <title>rightarm</title>
+    <line fill="none" stroke="#000000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="158" y1="130" x2="204" y2="107" id="svg_13"/>
+    <path fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z" id="rightarm-callout"/>
+    <text id="rightarm-quote" fill="#000000" stroke="#000000" stroke-width="0" stroke-linejoin="null" stroke-linecap="null" x="422.05684" y="50.3" font-size="24" font-family="serif" text-anchor="middle" xml:space="preserve" transform="matrix(0.605765700340271,0,0,0.7692307829856873,29.832448644563556,12.461537718772888) ">I'm getting the shakes now!</text>
+   </g>
+   <g id="leftarm" display="none">
+    <title>leftarm</title>
+    <line stroke-width="3" id="svg_32" y2="108" x2="113" y1="129" x1="157" stroke-linecap="null" stroke-linejoin="null" stroke="#000000" fill="none"/>
+    <path id="leftarm-callout" fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z"/>
+    <text id="leftarm-quote" transform="matrix(0.585355132567301,0,0,0.7932947421408301,164.24613635818253,18.2273132379174) " xml:space="preserve" text-anchor="middle" font-family="serif" font-size="24" y="41.77153" x="208" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" stroke="#000000" fill="#000000">Roderigo, Roderigo! Save me!</text>
+   </g>
+   <g id="leftleg" display="none">
+    <title>leftleg</title>
+    <line fill="none" stroke="#000000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="156" y1="188" x2="109" y2="229" id="svg_14"/>
+    <path id="svg_27" fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z"/>
+    <text fill="#000000" stroke="#000000" stroke-width="0" stroke-linejoin="null" stroke-linecap="null" x="398.94559" y="52.9" id="leftleg-quote" font-size="24" font-family="serif" text-anchor="middle" xml:space="preserve" transform="matrix(0.605765700340271,0,0,0.7692307829856873,29.832448644563556,12.461537718772888) ">You're killing me, Smalls!</text>
+   </g>
+   <g id="rightleg" display="none">
+    <title>rightleg</title>
+    <line fill="none" stroke="#000000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="157" y1="187" x2="189" y2="233" id="svg_16"/>
+    <line fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" x1="139" y1="110" x2="62" y2="27" id="svg_18"/>
+    <ellipse fill="none" stroke="#ff0000" stroke-width="3" stroke-linejoin="null" stroke-linecap="null" cx="160" cy="112" id="svg_17" rx="23" ry="5"/>
+    <path fill="#fcf9f9" stroke="#000000" d="m190.36249,36.36404l0,0c0,-2.84449 9.84354,-5.15054 21.98143,-5.15054l9.99023,0l0,0l47.95894,0l89.92035,0c5.8262,0 11.41809,0.54265 15.54169,1.5086c4.12088,0.96596 6.43875,2.276 6.43875,3.64194l0,12.87632l0,0l0,7.72614l0,0c0,2.84438 -9.84213,5.1503 -21.98044,5.1503l-89.92035,0l-62.64943,13.0967l14.69049,-13.0967l-9.99023,0c-12.13789,0 -21.98143,-2.30593 -21.98143,-5.1503l0,0l0,-7.72614l0,0l0,-12.87632z" id="rightleg-callout"/>
+    <text fill="#000000" stroke="#000000" stroke-width="0" stroke-linejoin="null" stroke-linecap="null" x="400.59639" y="51.6" font-size="24" font-family="serif" text-anchor="middle" xml:space="preserve" transform="matrix(0.605765700340271,0,0,0.7692307829856873,29.832448644563556,12.461537718772888) " id="rightleg-quote">Game over. He's dead, Jim!</text>
+   </g>
+  </svg>
+      <div id="newGame" class="newGame">
+      <h3 id="message">You won! Play again.</h3><br/>
+      <button id="newGameBtn">Play Again!</button>
+    </div>
+      <div class="container"> 
+      <span class="">
+        <h4>Correct Guesses</h4>
+        <div id="letter0" class="letter"></div>
+        <div id="letter1" class="letter"></div>
+        <div id="letter2" class="letter"></div>
+        <div id="letter3" class="letter"></div>
+        <div id="letter4" class="letter"></div>
+        <div id="letter5" class="letter"></div>
+        <div id="letter6" class="letter"></div>
+        <div id="letter7" class="letter"></div>
+        <div id="letter8" class="letter"></div>
+        <div id="letter9" class="letter"></div>
+      </span>
+      <br/>
+      <br/> 
+      <span class="">        
+          <div id="letter-line0" class="line"></div>
+          <div id="letter-line1" class="line"></div>
+          <div id="letter-line2" class="line"></div>
+          <div id="letter-line3" class="line"></div>
+          <div id="letter-line4" class="line"></div>
+          <div id="letter-line5" class="line"></div>
+          <div id="letter-line6" class="line"></div>
+          <div id="letter-line7" class="line"></div>
+          <div id="letter-line8" class="line"></div>
+          <div id="letter-line9" class="line"></div>
+      </span>
+    </div>
+      <div class="container"> 
+          <span class="">
+                  <h4>Incorrect Guesses</h4>
+              <div id="guess0" class="guess"></div>
+              <div id="guess1" class="guess"></div>
+              <div id="guess2" class="guess"></div>
+              <div id="guess3" class="guess"></div>
+              <div id="guess4" class="guess"></div>
+          </span>        
+      <br/>
+          <br/> 
+          <span class="">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </span>
+      </div>
+</div>
+<div id="right-pane" class="box">
+
+      <div>  
+      <span id="letter-buttons" class="container">      
+        <button id="a">A</button>
+        <button id="b">B</button>
+        <button id="c">C</button>
+        <button id="d">D</button>
+        <button id="e">E</button>
+        <button id="f">F</button>     
+        <button id="g">G</button>
+        <button id="h">H</button>
+        <button id="i">I</button>
+        <button id="j">J</button>
+        <button id="k">K</button>
+        <button id="l">L</button>
+        <button id="m">M</button>
+        <button id="n">N</button>     
+        <button id="o">O</button>
+        <button id="p">P</button>
+        <button id="q">Q</button>
+        <button id="r">R</button>
+        <button id="s">S</button>
+        <button id="t">T</button>
+        <button id="u">U</button>
+        <button id="v">V</button>     
+        <button id="w">W</button>
+        <button id="x">X</button>        
+        <button id="y">Y</button>     
+        <button id="z">Z</button>
+      </span>
+      <br/> 
+      <span class="container">
+        
+      </span>
+      </div>
+</div>
+</div>
+
+</body>
+</html>
