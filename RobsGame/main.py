@@ -16,17 +16,31 @@ class SendReminderEmail(webapp2.RequestHandler):
         """Send a reminder email to each User with an email about games.
         Called every hour using a cron job"""
         app_id = app_identity.get_application_id()
-        users = User.query(User.email != None)
+        # users = User.query(User.email != None)
+        
+        games = Game.query(Game.game_over == False, projection=["user"], distinct=True)
+        for game in games:
+            # print game.user
+            users = User.query(User.key == game.user)
+            for user in users:
+                subject = 'Its Hangman Time!'
+                body = 'Hello {}, you currently have a pending Hangman game!  \nDid you want to finish it?'.format(user.name)
+                # This will send test emails, the arguments to send_mail are:
+                # from, to, subject, body
+                mail.send_mail('noreply@{}.appspotmail.com'.format(app_id),
+                               user.email,
+                               subject,
+                               body)
 
-        for user in users:
-            subject = 'This is a reminder!'
-            body = 'Hello {}, you currently have a pending Hangman game!  \nDid you want to finish it?'.format(user.name)
-            # This will send test emails, the arguments to send_mail are:
-            # from, to, subject, body
-            mail.send_mail('noreply@{}.appspotmail.com'.format(app_id),
-                           user.email,
-                           subject,
-                           body)
+        # for user in users:
+        #     subject = 'This is a reminder!'
+        #     body = 'Hello {}, you currently have a pending Hangman game!  \nDid you want to finish it?'.format(user.name)
+        #     # This will send test emails, the arguments to send_mail are:
+        #     # from, to, subject, body
+        #     mail.send_mail('noreply@{}.appspotmail.com'.format(app_id),
+        #                    user.email,
+        #                    subject,
+        #                    body)
 
 
 
