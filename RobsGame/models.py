@@ -82,6 +82,9 @@ class GameForm(messages.Message):
     message = messages.StringField(4, required=True)
     user_name = messages.StringField(5, required=True)
 
+class GameForms(messages.Message):
+    """Return multiple ScoreForms"""
+    items = messages.MessageField(GameForm, 1, repeated=True)
 
 class NewGameForm(messages.Message):
     """Used to create a new game"""
