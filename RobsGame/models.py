@@ -20,8 +20,10 @@ class Game(ndb.Model):
     remaining_letters = ndb.StringProperty(repeated=True)
     attempts_allowed = ndb.IntegerProperty(required=True)
     attempts_remaining = ndb.IntegerProperty(required=True, default=5)
-    game_over = ndb.BooleanProperty(required=True, default=False)
+    game_over = ndb.BooleanProperty(default=False)
     user = ndb.KeyProperty(required=True, kind='User')
+    cancelled = ndb.BooleanProperty(default=False)
+
 
     @classmethod
     def new_game(cls, user, attempts):
@@ -49,17 +51,24 @@ class Game(ndb.Model):
         form.attempts_remaining = self.attempts_remaining
         form.game_over = self.game_over
         form.message = message
+        form.cancelled = self.cancelled
         return form
 
-    def end_game(self, won=False):
+    def end_game(self, won, cancelled):
         """Ends the game - if won is True, the player won. - if won is False,
-        the player lost."""
+        the player lost or cancelled."""
+        
         self.game_over = True
+        if won == True:  # makes sure a game can't be both won and cancelled
+            self.cancelled = False
+        else:
+            self.cancelled = cancelled
         self.put()
         # Add the game to the score 'board'
-        score = Score(user=self.user, date=date.today(), won=won,
-                      guesses=self.attempts_allowed - self.attempts_remaining)
-        score.put()
+        if cancelled == False:
+            score = Score(user=self.user, date=date.today(), won=won, 
+                guesses=self.attempts_allowed - self.attempts_remaining)
+            score.put()
 
 
 class Score(ndb.Model):
@@ -81,6 +90,7 @@ class GameForm(messages.Message):
     game_over = messages.BooleanField(3, required=True)
     message = messages.StringField(4, required=True)
     user_name = messages.StringField(5, required=True)
+    cancelled = messages.BooleanField(6)
 
 class GameForms(messages.Message):
     """Return multiple ScoreForms"""
@@ -89,8 +99,6 @@ class GameForms(messages.Message):
 class NewGameForm(messages.Message):
     """Used to create a new game"""
     user_name = messages.StringField(1, required=True)
-    # min = messages.IntegerField(2, default=1)
-    # max = messages.IntegerField(3, default=10)
     attempts = messages.IntegerField(4, default=5)
 
 
@@ -105,6 +113,7 @@ class ScoreForm(messages.Message):
     date = messages.StringField(2, required=True)
     won = messages.BooleanField(3, required=True)
     guesses = messages.IntegerField(4, required=True)
+    cancelled = messages.BooleanField(5)
 
 
 class ScoreForms(messages.Message):

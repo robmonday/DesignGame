@@ -25,6 +25,8 @@ MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
     urlsafe_game_key=messages.StringField(1),)
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
+CANCEL_GAME_REQUEST = endpoints.ResourceContainer(
+    urlsafe_game_key=messages.StringField(1),)
 
 MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
 
@@ -113,26 +115,31 @@ class GuessANumberApi(remote.Service):
         except:
           msg = 'Not a correct guess.'
 
-        # if request.guess == game.target:
-        #     game.end_game(True)
-        #     return game.to_form('You win!')
-
-        # if request.guess < game.target:
-        #     msg = 'Too low!'
-        # else:
-        #     msg = 'Too high!'
-
         if len(game.remaining_letters) < 1:
-          game.end_game(True)
+          game.end_game(won=True, cancelled=False)
           return game.to_form('You win!')        
 
         elif game.attempts_remaining < 1:
-          game.end_game(False)
+          game.end_game(won=False, cancelled=False)
           return game.to_form(msg + ' Game over!')
         
         else:
             game.put()
             return game.to_form(msg)
+
+    @endpoints.method(request_message=CANCEL_GAME_REQUEST,
+                      response_message=GameForm,
+                      path='game/cancel/{urlsafe_game_key}',
+                      name='cancel_game',
+                      http_method='PUT')
+    def cancel_game(self, request):
+        """Makes a move. Returns a game state with message"""
+        game = get_by_urlsafe(request.urlsafe_game_key, Game)
+        if game.game_over:
+            return game.to_form('Game already over!')
+
+        game.end_game(won=False, cancelled=True)
+        return game.to_form('Game has been cancelled.')
 
     @endpoints.method(response_message=ScoreForms,
                       path='scores',
