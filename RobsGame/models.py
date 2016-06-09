@@ -57,17 +57,21 @@ class Game(ndb.Model):
     def end_game(self, won, cancelled):
         """Ends the game - if won is True, the player won. - if won is False,
         the player lost or cancelled."""
-        
+        points = 0
+        attempts_made = self.attempts_allowed - self.attempts_remaining
+        correct_attempts = len(self.target)
+
         self.game_over = True
-        if won == True:  # makes sure a game can't be both won and cancelled
-            self.cancelled = False
+        if won == True:  
+            self.cancelled = False # makes sure a game can't be both won and cancelled
+            points = int(float(correct_attempts)/float(attempts_made)*1000) # calculates the score for a game won
         else:
             self.cancelled = cancelled
         self.put()
         # Add the game to the score 'board'
-        if cancelled == False:
+        if cancelled != True:
             score = Score(user=self.user, date=date.today(), won=won, 
-                guesses=self.attempts_allowed - self.attempts_remaining)
+                guesses=attempts_made, points=points)
             score.put()
 
 
@@ -77,10 +81,11 @@ class Score(ndb.Model):
     date = ndb.DateProperty(required=True)
     won = ndb.BooleanProperty(required=True)
     guesses = ndb.IntegerProperty(required=True)
+    points = ndb.IntegerProperty(required=True)
 
     def to_form(self):
         return ScoreForm(user_name=self.user.get().name, won=self.won,
-                         date=str(self.date), guesses=self.guesses)
+                         date=str(self.date), guesses=self.guesses, points=self.points)
 
 
 class GameForm(messages.Message):
@@ -114,6 +119,7 @@ class ScoreForm(messages.Message):
     won = messages.BooleanField(3, required=True)
     guesses = messages.IntegerField(4, required=True)
     cancelled = messages.BooleanField(5)
+    points = messages.IntegerField(6)
 
 
 class ScoreForms(messages.Message):

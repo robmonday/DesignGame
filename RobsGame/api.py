@@ -149,6 +149,19 @@ class GuessANumberApi(remote.Service):
         """Return all scores"""
         return ScoreForms(items=[score.to_form() for score in Score.query()])
 
+    @endpoints.method(response_message=ScoreForms,
+                      path='leaderboard',
+                      name='get_high_scores',
+                      http_method='GET')
+    def get_high_scores(self, request):
+        """Return all scores"""
+        # ScoreForms(items=[score.to_form() for score in Score.query()])
+        scores = Score.query(Score.won==True).order(-Score.points)
+        score_form_objects = []
+        for score in scores:
+          score_form_objects.append(score.to_form())
+        return ScoreForms(items=score_form_objects)
+
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=ScoreForms,
                       path='scores/user/{user_name}',
