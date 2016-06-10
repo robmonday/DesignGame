@@ -51,6 +51,7 @@ class Game(ndb.Model):
     game_over = ndb.BooleanProperty(default=False)
     user = ndb.KeyProperty(required=True, kind='User')
     cancelled = ndb.BooleanProperty(default=False)
+    history = ndb.StringProperty(repeated=True)
 
 
     @classmethod
