@@ -1,8 +1,21 @@
 Reflect on Your Design
 
-Document your design decisions by answering the following questions:
+These answers should be in a file Design.txt. Your responses can be in paragraph form or bulleted lists. This document should be around 500 words long.  Document your design decisions by answering the following questions:
 
-    What additional properties did you add to your models and why?
-    What were some of the trade-offs or struggles you faced when implementing the new game logic?
+------------------
+What additional properties did you add to your models and why?
 
-These answers should be in a file Design.txt. Your responses can be in paragraph form or bulleted lists. This document should be around 500 words long.
+For the User ndb.Model class, I added score_avg and update_avg_score properties, which track the user's average score after each game.  These properties support the get_user_rankings endpoint.  I also added a to_form property to assist in providing info to endpoints.
+
+For the Game ndb.Model class, I added cancelled and history properties.  Cancelled allows the API to explicitly track when games have been cancelled (as opposed to being won, lost, or still in progress).  This supports the cancel_game endpoint.  History collects moves and outcomes sequentially as part of the make_move endpoint.  This ultimately supports the get_game_history endpoint, which needs access to game history.
+
+For the Score ndb.Model class, I added the points property.  This is a crucial part of the Hangman scoring system I created, since it stores the actual score values.  Scores are calculated when Game.end_game property is called from within the make_move endpoint.
+
+I almost created an entire MoveHistory ndb.Model class, but I'm really glad I didn't in hindsight!
+
+------------------
+What were some of the trade-offs or struggles you faced when implementing the new game logic?
+
+One of the major trade-offs I kept thinking about was whether to create separate global methods or to put them inside the ndb.Model classes.  For example, the update_avg_score method supports the get_user_rankings endpoint, but is defined within the User model. After going back and forth I finally decided not to define any global methods, and instead all are defined as class properties.  Was that the right approach?
+
+One struggle I had related to completing the cron job update.  It was probably my fault though:  I decided to try it first in the project since it seemed 'easy'.  There were two parts: (1) update frequency of alert (2) update alert to only notify users with CURRENT games.  Part 2 required me to query datastore and to try to 'join' various datastore tables, which was not at all straight-forward.  Anyways, all is well that ends well I guess. :)
