@@ -135,7 +135,7 @@ class GuessANumberApi(remote.Service):
                       name='cancel_game',
                       http_method='PUT')
     def cancel_game(self, request):
-        """Makes a move. Returns a game state with message"""
+        """Cancels specified game"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
             return game.to_form('Game already over!')
@@ -213,7 +213,7 @@ class GuessANumberApi(remote.Service):
                       name='get_game_history',
                       http_method='GET')
     def get_game_history(self, request):
-        """Return the current game state."""
+        """Return log chronology of all moves for a specified game."""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if not game:
             raise endpoints.NotFoundException('Game not found!')
