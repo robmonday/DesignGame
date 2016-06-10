@@ -11,7 +11,21 @@ from google.appengine.ext import ndb
 class User(ndb.Model):
     """User profile"""
     name = ndb.StringProperty(required=True)
-    email =ndb.StringProperty()
+    email = ndb.StringProperty()
+    score_avg = ndb.IntegerProperty(default=0)
+
+    def update_avg_score(self):
+        """Updates average score for user"""
+        score_sum = 0
+        score_count = 0        
+        scores = Score.ancestor(self.key)
+        for score in scores:
+            score_sum += score.points
+            score_count += 1
+
+        self.score_avg = score_sum / score_count
+
+
 
 
 class Game(ndb.Model):
@@ -69,10 +83,16 @@ class Game(ndb.Model):
             self.cancelled = cancelled
         self.put()
         # Add the game to the score 'board'
-        if cancelled != True:
+        if cancelled == False:
             score = Score(user=self.user, date=date.today(), won=won, 
                 guesses=attempts_made, points=points)
             score.put()
+            user_object = User(self.user==User.key).get()
+            user_object.update_avg_score()
+
+
+
+
 
 
 class Score(ndb.Model):

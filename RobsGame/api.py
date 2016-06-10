@@ -150,11 +150,11 @@ class GuessANumberApi(remote.Service):
         return ScoreForms(items=[score.to_form() for score in Score.query()])
 
     @endpoints.method(response_message=ScoreForms,
-                      path='leaderboard',
+                      path='game_leaderboard',
                       name='get_high_scores',
                       http_method='GET')
     def get_high_scores(self, request):
-        """Return all scores"""
+        """Return highest scoring games in descending order"""
         # ScoreForms(items=[score.to_form() for score in Score.query()])
         scores = Score.query(Score.won==True).order(-Score.points)
         score_form_objects = []
