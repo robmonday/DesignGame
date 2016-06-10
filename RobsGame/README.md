@@ -1,4 +1,16 @@
-#Full Stack Nanodegree Project 4 Refresh
+# Hangman - Design a Game Project
+
+This project is part of the Udacity Full Stack Nanodegree.
+
+##Game Description:
+This game is an implementation of Hangman. Each game begins with a word randomly chosen 
+from a predefined set.  Also a 'target' number between the minimum and maximum values provided, and a maximum number of
+'attempts'. 'Guesses' are sent to the `make_move` endpoint which will reply
+with either: 'too low', 'too high', 'you win', or 'game over' (if the maximum
+number of attempts is reached).
+Many different Guess a Number games can be played by many different Users at any
+given time. Each game can be retrieved or played by using the path parameter
+`urlsafe_game_key`.
 
 ## Set-Up Instructions:
 1.  Update the value of application in app.yaml to the app ID you have registered
@@ -7,19 +19,8 @@
  running by visiting the API Explorer - by default localhost:8080/_ah/api/explorer.
 1.  (Optional) Generate your client library(ies) with the endpoints tool.
  Deploy your application.
+  
  
- 
- 
-##Game Description:
-Guess a number is a simple guessing game. Each game begins with a random 'target'
-number between the minimum and maximum values provided, and a maximum number of
-'attempts'. 'Guesses' are sent to the `make_move` endpoint which will reply
-with either: 'too low', 'too high', 'you win', or 'game over' (if the maximum
-number of attempts is reached).
-Many different Guess a Number games can be played by many different Users at any
-given time. Each game can be retrieved or played by using the path parameter
-`urlsafe_game_key`.
-
 ##Files Included:
  - api.py: Contains endpoints and game playing logic.
  - app.yaml: App configuration.
