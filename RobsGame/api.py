@@ -14,7 +14,7 @@ from google.appengine.api import taskqueue
 from models import User, Game, Score
 from models import StringMessage, NewGameForm, GameForm, MakeMoveForm,\
     ScoreForms
-from models import GameForms
+from models import GameForms, UserForm, UserForms
 from utils import get_by_urlsafe
 
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
@@ -196,5 +196,14 @@ class GuessANumberApi(remote.Service):
             memcache.set(MEMCACHE_MOVES_REMAINING,
                          'The average moves remaining is {:.2f}'.format(average))
 
+    @endpoints.method(response_message=UserForms,
+                      path='user_leaderboard',
+                      name='get_user_rankings',
+                      http_method='GET')
+    def get_user_rankings(self, request):
+        """Return highest avg scoring users in descending order"""
+        users = User.query()
+        return UserForms(items=[user.to_form('games for this user') for user in users])
+      
 
 api = endpoints.api_server([GuessANumberApi])

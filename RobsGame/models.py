@@ -34,6 +34,13 @@ class User(ndb.Model):
             self.score_avg = score_sum / score_count
             self.put()
 
+    def to_form(self, message):
+        """Returns a UserForm representation of the User"""
+        form = UserForm()
+        # form.urlsafe_key = self.key.urlsafe()
+        form.name = self.name
+        form.score_avg = self.score_avg
+        return form
 
 class Game(ndb.Model):
     """Game object"""
@@ -159,3 +166,12 @@ class ScoreForms(messages.Message):
 class StringMessage(messages.Message):
     """StringMessage-- outbound (single) string message"""
     message = messages.StringField(1, required=True)
+
+class UserForm(messages.Message):
+    """UserForm for outbound user state information"""
+    name = messages.StringField(1, required=True)
+    score_avg = messages.IntegerField(2, required=True)
+
+class UserForms(messages.Message):
+    """Return multiple UserForms"""
+    items = messages.MessageField(UserForm, 1, repeated=True)
