@@ -37,7 +37,6 @@ class User(ndb.Model):
     def to_form(self, message):
         """Returns a UserForm representation of the User"""
         form = UserForm()
-        # form.urlsafe_key = self.key.urlsafe()
         form.name = self.name
         form.score_avg = self.score_avg
         return form
@@ -53,13 +52,9 @@ class Game(ndb.Model):
     cancelled = ndb.BooleanProperty(default=False)
     history = ndb.StringProperty(repeated=True)
 
-
     @classmethod
     def new_game(cls, user, attempts):
         """Creates and returns a new game"""
-        # if max < min:
-        #     raise ValueError('Maximum must be greater than minimum')
-        
         word_selected = random.choice(["car", "plane", "train"])
         list_of_letters = list(word_selected)
 
@@ -110,8 +105,6 @@ class Game(ndb.Model):
             user_object.update_avg_score()
             # print "update_avg_score called for " + user_object.name
 
-
-
 class Score(ndb.Model):
     """Score object"""
     user = ndb.KeyProperty(required=True, kind='User')
@@ -123,7 +116,6 @@ class Score(ndb.Model):
     def to_form(self):
         return ScoreForm(user_name=self.user.get().name, won=self.won,
                          date=str(self.date), guesses=self.guesses, points=self.points)
-
 
 class GameForm(messages.Message):
     """GameForm for outbound game state information"""
@@ -143,11 +135,9 @@ class NewGameForm(messages.Message):
     user_name = messages.StringField(1, required=True)
     attempts = messages.IntegerField(2, default=5)
 
-
 class MakeMoveForm(messages.Message):
     """Used to make a move in an existing game"""
     guess = messages.StringField(1, required=True)
-
 
 class ScoreForm(messages.Message):
     """ScoreForm for outbound Score information"""
@@ -157,7 +147,6 @@ class ScoreForm(messages.Message):
     guesses = messages.IntegerField(4, required=True)
     cancelled = messages.BooleanField(5)
     points = messages.IntegerField(6)
-
 
 class ScoreForms(messages.Message):
     """Return multiple ScoreForms"""
@@ -176,3 +165,7 @@ class UserForm(messages.Message):
 class UserForms(messages.Message):
     """Return multiple UserForms"""
     items = messages.MessageField(UserForm, 1, repeated=True)
+
+class GameHistoryForm(messages.Message):
+    """GameHistoryForm for outbound game history information"""
+    history = messages.StringField(1, repeated=True)
