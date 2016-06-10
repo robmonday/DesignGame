@@ -1,6 +1,6 @@
 Reflect on Your Design
 
-These answers should be in a file Design.txt. Your responses can be in paragraph form or bulleted lists. This document should be around 500 words long.  Document your design decisions by answering the following questions:
+Document your design decisions by answering the following questions:
 
 ------------------
 What additional properties did you add to your models and why?
@@ -13,9 +13,18 @@ For the Score ndb.Model class, I added the points property.  This is a crucial p
 
 I almost created an entire MoveHistory ndb.Model class, but I'm really glad I didn't in hindsight!
 
+I also defined many protorpc models.  These included GameForms, UserForm, UserForms, and GameHistoryForm.  In general I thought defining these classes were much easier.  Seemed like great practice for thinking with an 'object-oriented' perspective.
+
 ------------------
 What were some of the trade-offs or struggles you faced when implementing the new game logic?
 
 One of the major trade-offs I kept thinking about was whether to create separate global methods or to put them inside the ndb.Model classes.  For example, the update_avg_score method supports the get_user_rankings endpoint, but is defined within the User model. After going back and forth I finally decided not to define any global methods, and instead all are defined as class properties.  Was that the right approach?
 
 One struggle I had related to completing the cron job update.  It was probably my fault though:  I decided to try it first in the project since it seemed 'easy'.  There were two parts: (1) update frequency of alert (2) update alert to only notify users with CURRENT games.  Part 2 required me to query datastore and to try to 'join' various datastore tables, which was not at all straight-forward.  Anyways, all is well that ends well I guess. :)
+
+Another struggle I had during the project was whether to test in a local environment or in the Google cloud.  Basically, the live Google cloud offered richer features  than the local SDK environment, better error logs and more access to datastore data.  But there is a time cost to deploy to App Engine ever single time you make a change and want to test.  Ultimately I used a combination of the two.
+
+Lastly, I struggled with the difference between ndb.Model and db.Model.  Apparently db.Model is an older class that was used by Google in the past.  When I was looking at Google App Engine documentation and otherwise searching for answers online I kept getting the two mixed up.  However, there are important differences in syntax, etc.
+
+------------------
+These answers should be in a file Design.txt. Your responses can be in paragraph form or bulleted lists. This document should be around 500 words long.  
