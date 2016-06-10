@@ -168,4 +168,6 @@ class UserForms(messages.Message):
 
 class GameHistoryForm(messages.Message):
     """GameHistoryForm for outbound game history information"""
-    history = messages.StringField(1, repeated=True)
+    urlsafe_key = messages.StringField(1, required=True)
+    history = messages.StringField(2, repeated=True)
+    game_over = messages.BooleanField(3, required=True)

@@ -218,7 +218,7 @@ class GuessANumberApi(remote.Service):
         if not game:
             raise endpoints.NotFoundException('Game not found!')
 
-        return GameHistoryForm(history=game.history)
+        return GameHistoryForm(history=game.history, game_over=game.game_over, urlsafe_key=request.urlsafe_game_key)
       
 
 api = endpoints.api_server([GuessANumberApi])
