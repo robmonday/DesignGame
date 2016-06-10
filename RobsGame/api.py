@@ -202,8 +202,8 @@ class GuessANumberApi(remote.Service):
                       http_method='GET')
     def get_user_rankings(self, request):
         """Return highest avg scoring users in descending order"""
-        users = User.query()
-        return UserForms(items=[user.to_form('games for this user') for user in users])
+        users = User.query().order(-User.score_avg)
+        return UserForms(items=[user.to_form('user rankings') for user in users])
       
 
 api = endpoints.api_server([GuessANumberApi])
