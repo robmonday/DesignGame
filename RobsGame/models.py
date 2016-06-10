@@ -16,21 +16,23 @@ class User(ndb.Model):
 
     def update_avg_score(self):
         """Updates average score for user"""
-        print "update_avg_score called for winner!"
+        print "update_avg_score method called from within user object"
         score_sum = 0
         print score_sum
         score_count = 0        
-        scores = Score.ancestor(self.key)
+        scores = Score.query(Score.user==self.key) # Score.key==self.key ...need to add filter to get only scores for THIS user
+        
         for score in scores:
-            print "+ "+score.points
+            print "+ "+ str(score.points)
             score_sum += score.points
             score_count += 1
-            print "= "+score_sum
+            print "= "+str(score_sum)
 
+        print "scores counted: "+str(score_count)
 
-        self.score_avg = score_sum / score_count
-
-
+        if score_count > 0:
+            self.score_avg = score_sum / score_count
+            self.put()
 
 
 class Game(ndb.Model):
@@ -92,15 +94,13 @@ class Game(ndb.Model):
             score = Score(user=self.user, date=date.today(), won=won, 
                 guesses=attempts_made, points=points)
             score.put()
-            print "game result recorded in scores table!"
+            # print "game result recorded in scores table!"
 
-            # user_object = User.query(self.user==User.key).get()
+            user_object = User.query(self.user==User.key).get()
             # print "user record queried " + user_object.name
 
-            # user_object.update_avg_score()
-
-
-
+            user_object.update_avg_score()
+            # print "update_avg_score called for " + user_object.name
 
 
 
