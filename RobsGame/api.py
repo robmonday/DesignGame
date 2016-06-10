@@ -111,21 +111,22 @@ class GuessANumberApi(remote.Service):
         try:
           index_var = game.remaining_letters.index(request.guess)
           game.remaining_letters.pop(index_var)
-          msg = 'You got a letter!' 
+          msg = 'You got a letter! ' 
         except:
-          msg = 'Not a correct guess.'
+          msg = 'Not a correct guess. '
 
         if len(game.remaining_letters) < 1:
           game.end_game(won=True, cancelled=False)
-          return game.to_form('You win!')        
+          msg += 'You win!'       
 
         elif game.attempts_remaining < 1:
           game.end_game(won=False, cancelled=False)
-          return game.to_form(msg + ' Game over!')
+          msg += ' Game over!'
         
         else:
             game.put()
-            return game.to_form(msg)
+
+        return game.to_form(msg)
 
     @endpoints.method(request_message=CANCEL_GAME_REQUEST,
                       response_message=GameForm,
