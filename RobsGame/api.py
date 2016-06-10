@@ -20,8 +20,7 @@ from utils import get_by_urlsafe
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
 GET_GAME_REQUEST = endpoints.ResourceContainer(
         urlsafe_game_key=messages.StringField(1),)
-MAKE_MOVE_REQUEST = endpoints.ResourceContainer(
-    MakeMoveForm,
+MAKE_MOVE_REQUEST = endpoints.ResourceContainer(MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
@@ -30,8 +29,8 @@ CANCEL_GAME_REQUEST = endpoints.ResourceContainer(
 
 MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
 
-@endpoints.api(name='guess_a_number', version='v1')
-class GuessANumberApi(remote.Service):
+@endpoints.api(name='hangman_api', version='v1')
+class HangmanApi(remote.Service):
     """Game API"""
     @endpoints.method(request_message=USER_REQUEST,
                       response_message=StringMessage,
@@ -221,4 +220,4 @@ class GuessANumberApi(remote.Service):
         return GameHistoryForm(history=game.history, game_over=game.game_over, urlsafe_key=request.urlsafe_game_key)
       
 
-api = endpoints.api_server([GuessANumberApi])
+api = endpoints.api_server([HangmanApi])
