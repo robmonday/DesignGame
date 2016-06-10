@@ -16,12 +16,17 @@ class User(ndb.Model):
 
     def update_avg_score(self):
         """Updates average score for user"""
+        print "update_avg_score called for winner!"
         score_sum = 0
+        print score_sum
         score_count = 0        
         scores = Score.ancestor(self.key)
         for score in scores:
+            print "+ "+score.points
             score_sum += score.points
             score_count += 1
+            print "= "+score_sum
+
 
         self.score_avg = score_sum / score_count
 
@@ -87,8 +92,12 @@ class Game(ndb.Model):
             score = Score(user=self.user, date=date.today(), won=won, 
                 guesses=attempts_made, points=points)
             score.put()
-            user_object = User(self.user==User.key).get()
-            user_object.update_avg_score()
+            print "game result recorded in scores table!"
+
+            # user_object = User.query(self.user==User.key).get()
+            # print "user record queried " + user_object.name
+
+            # user_object.update_avg_score()
 
 
 
