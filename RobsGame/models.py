@@ -63,16 +63,13 @@ class Game(ndb.Model):
 
     def generate_current_state(self, remaining_letters, target):
         original_letters = list(target)
-        print original_letters
         current_state_build = ""
         for letter in original_letters:
             try:
-                letter_index = remaining_letters.index(letter)
-                current_state_build += remaining_letters[letter_index]
-                print current_state_build
-            except:
-                current_state_build += "_"
-                print current_state_build
+                letter_index = remaining_letters.index(letter) # Is this original_letter still unguessed?
+                current_state_build += "_" # if so, show a blank in current_state
+            except: # otherwise this original_letter has already been guessed
+                current_state_build += letter # so reveal it in current_state
             current_state_build += " "
         return current_state_build
 
