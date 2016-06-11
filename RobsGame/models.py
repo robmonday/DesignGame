@@ -7,14 +7,9 @@ from datetime import date
 from protorpc import messages
 from google.appengine.ext import ndb
 
-# JSON include --------
 import json
 from pprint import pprint
 
-with open('words.json') as data_file:    
-    data = json.load(data_file)
-pprint(data)
-# JSON include --------
 
 class User(ndb.Model):
     """User profile"""
@@ -63,6 +58,9 @@ class Game(ndb.Model):
     @classmethod
     def new_game(cls, user, attempts):
         """Creates and returns a new game"""
+        with open('words.json') as data_file:    
+            data = json.load(data_file)        
+
         word_selected = random.choice(data["words"])
         list_of_letters = list(word_selected)
 
