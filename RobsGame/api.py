@@ -5,16 +5,15 @@ move game logic to another file. Ideally the API will be simple, concerned
 primarily with communication to/from the API's users."""
 
 
-import logging
 import endpoints
 from protorpc import remote, messages
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 
-from models import User, Game, Score
+from models import User, Game, Score, UserForms # UserForms is used by get_user_rankings endpoint
 from models import StringMessage, NewGameForm, GameForm, MakeMoveForm,\
     ScoreForms
-from models import GameForms, UserForm, UserForms, GameHistoryForm
+from models import GameForms, GameHistoryForm
 from utils import get_by_urlsafe
 
 NEW_GAME_REQUEST = endpoints.ResourceContainer(NewGameForm)
