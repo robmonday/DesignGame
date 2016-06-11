@@ -109,7 +109,7 @@ class HangmanApi(remote.Service):
         if not request.guess.isalpha(): # validation:  error if input is not string
           raise endpoints.BadRequestException('This guess is not permitted.')
 
-        if request.guess == game.target: # for when user guesses the entire word
+        if request.guess == game.target: # allow user to guess entire word anytime
           game.end_game(won=True, cancelled=False)
           msg = 'You win!'             
         else:  
@@ -131,8 +131,10 @@ class HangmanApi(remote.Service):
         
         history_entry = "Guess: "+str(request.guess)+", Result: "+str(msg)
         game.history.append(history_entry)
-        game.put()
 
+        game.current_state = game.generate_current_state(game.remaining_letters, game.target)
+
+        game.put()
         return game.to_form(msg)
 
     @endpoints.method(request_message=CANCEL_GAME_REQUEST,

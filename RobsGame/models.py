@@ -54,6 +54,19 @@ class Game(ndb.Model):
     user = ndb.KeyProperty(required=True, kind='User')
     cancelled = ndb.BooleanProperty(default=False)
     history = ndb.StringProperty(repeated=True)
+    current_state = ndb.StringProperty()
+
+    def generate_current_state(self, remaining_letters, target):
+        original_letters = list(target)
+        current_state_build = ""
+        for letter in original_letters:
+            try:
+                letter_index = remaining_letters.index(letter) # Is this original_letter still unguessed?
+                current_state_build += "_" # if so, show a blank in current_state
+            except: # otherwise this original_letter has already been guessed
+                current_state_build += letter # so reveal it in current_state
+            current_state_build += " "
+        return current_state_build
 
     @classmethod
     def new_game(cls, user, attempts):
@@ -69,9 +82,10 @@ class Game(ndb.Model):
                     remaining_letters = list_of_letters,
                     attempts_allowed=attempts,
                     attempts_remaining=attempts,
-                    game_over=False)
+                    game_over=False, 
+                    current_state=generate_current_state(list_of_letters, word_selected))
         game.put()
-        return game
+        return game       
 
     def to_form(self, message):
         """Returns a GameForm representation of the Game"""
@@ -82,6 +96,7 @@ class Game(ndb.Model):
         form.game_over = self.game_over
         form.message = message
         form.cancelled = self.cancelled
+        form.current_state = self.current_state
         return form
 
     def end_game(self, won, cancelled):
@@ -134,6 +149,7 @@ class GameForm(messages.Message):
     message = messages.StringField(4, required=True)
     user_name = messages.StringField(5, required=True)
     cancelled = messages.BooleanField(6)
+    current_state = messages.StringField(7) # show which letters are missing: maybe '_ _ g' (for 'dog')
 
 class GameForms(messages.Message):
     """Return multiple ScoreForms"""
