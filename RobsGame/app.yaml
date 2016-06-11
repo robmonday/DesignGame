@@ -18,11 +18,6 @@ handlers:
 - url: /crons/send_reminder
   script: main.app
 
-- url: / 
-  static_files: index.html
-  upload: index\.html
-  secure: always
-
 libraries:
 - name: webapp2
   version: "2.5.2"
