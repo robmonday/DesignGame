@@ -101,25 +101,33 @@ class HangmanApi(remote.Service):
     def make_move(self, request):
         """Makes a move. Returns a game state with message"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
-        if game.game_over:
+
+        if game.game_over: # validation:  error if game is already finished
             raise endpoints.BadRequestException('Game already over!')
             # return game.to_form('Game already over!')
 
-        try:
-          index_var = game.remaining_letters.index(request.guess)
-          game.remaining_letters.pop(index_var)
-          msg = 'You got a letter! ' 
-        except:
-          msg = 'Not a correct guess. '
-          game.attempts_remaining -= 1
+        if not request.guess.isalpha(): # validation:  error if input is not string
+          raise endpoints.BadRequestException('This guess is not permitted.')
 
-        if len(game.remaining_letters) < 1:
+        if request.guess == game.target: # for when user guesses the entire word
           game.end_game(won=True, cancelled=False)
-          msg += 'You win!'       
+          msg += 'You win!'             
+        else:  
+          try:
+            index_var = game.remaining_letters.index(request.guess)
+            game.remaining_letters.pop(index_var)
+            msg = 'You got a letter! ' 
+          except:
+            msg = 'Not a correct guess. '
+            game.attempts_remaining -= 1
 
-        elif game.attempts_remaining < 1:
-          game.end_game(won=False, cancelled=False)
-          msg += ' Game over!'
+          if len(game.remaining_letters) < 1:
+            game.end_game(won=True, cancelled=False)
+            msg += 'You win!'       
+
+          elif game.attempts_remaining < 1:
+            game.end_game(won=False, cancelled=False)
+            msg += ' Game over!'
         
         history_entry = "Guess: "+str(request.guess)+", Result: "+str(msg)
         game.history.append(history_entry)
