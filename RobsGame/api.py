@@ -89,7 +89,7 @@ class HangmanApi(remote.Service):
         if not user:
             raise endpoints.NotFoundException(
                     'A User with that name does not exist!')
-        games = Game.query(Game.user == user.key)
+        games = Game.query(Game.user == user.key, Game.game_over == False)
         return GameForms(items=[game.to_form('games for this user') for game in games])
 
 
@@ -136,7 +136,8 @@ class HangmanApi(remote.Service):
         """Cancels specified game"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
-            return game.to_form('Game already over!')
+            raise endpoints.BadRequestException('Game already over!')
+            # return game.to_form('Game already over!')
 
         game.end_game(won=False, cancelled=True)
         return game.to_form('Game has been cancelled.')
