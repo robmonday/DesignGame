@@ -61,8 +61,20 @@ class Game(ndb.Model):
     history = ndb.StringProperty(repeated=True)
     current_state = ndb.StringProperty()
 
-    def generate_current_state(self,list_of_letters, word_selected):
-
+    def generate_current_state(self, remaining_letters, target):
+        original_letters = list(target)
+        print original_letters
+        current_state_build = ""
+        for letter in original_letters:
+            try:
+                letter_index = remaining_letters.index(letter)
+                current_state_build += remaining_letters[letter_index]
+                print current_state_build
+            except:
+                current_state_build += "_"
+                print current_state_build
+            current_state_build += " "
+        return current_state_build
 
     @classmethod
     def new_game(cls, user, attempts):
