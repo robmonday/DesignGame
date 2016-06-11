@@ -111,7 +111,7 @@ class HangmanApi(remote.Service):
 
         if request.guess == game.target: # for when user guesses the entire word
           game.end_game(won=True, cancelled=False)
-          msg += 'You win!'             
+          msg = 'You win!'             
         else:  
           try:
             index_var = game.remaining_letters.index(request.guess)

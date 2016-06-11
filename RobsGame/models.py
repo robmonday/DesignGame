@@ -96,7 +96,10 @@ class Game(ndb.Model):
         self.game_over = True
         if won == True:  
             self.cancelled = False # makes sure a game can't be both won and cancelled
-            points = int(float(correct_attempts)/float(attempts_made)*1000) # calculates the score for a game won
+            if attempts_made == 0:
+                points = 1000 # to prevent possible division by zero
+            else:
+                points = int(float(correct_attempts)/float(attempts_made)*1000) # calculates the score for a game won
         else:
             self.cancelled = cancelled
         self.put()
