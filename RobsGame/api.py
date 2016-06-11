@@ -102,7 +102,8 @@ class HangmanApi(remote.Service):
         """Makes a move. Returns a game state with message"""
         game = get_by_urlsafe(request.urlsafe_game_key, Game)
         if game.game_over:
-            return game.to_form('Game already over!')
+            raise endpoints.BadRequestException('Game already over!')
+            # return game.to_form('Game already over!')
 
         try:
           index_var = game.remaining_letters.index(request.guess)
