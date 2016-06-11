@@ -11,6 +11,8 @@ number of attempts is reached).
 Many different Hangman games can be played by many different Users at any
 given time. Each game can be retrieved or played by using the path parameter
 `urlsafe_game_key`.
+Once a game has been completed, scoring is calculated as percentage of right guesses multiplied by 1000.  
+The highest possible score is 1000, and the lowest possible score is zero.
 
 ## Set-Up Instructions:
 1.  Update the value of application in app.yaml to the app ID you have registered
@@ -43,12 +45,11 @@ given time. Each game can be retrieved or played by using the path parameter
  - **new_game**
     - Path: 'game'
     - Method: POST
-    - Parameters: user_name, min, max, attempts
+    - Parameters: user_name, attempts
     - Returns: GameForm with initial game state.
     - Description: Creates a new Game. user_name provided must correspond to an
-    existing user - will raise a NotFoundException if not. Min must be less than
-    max. Also adds a task to a task queue to update the average moves remaining
-    for active games.
+    existing user - will raise a NotFoundException if not. Also adds a task to a 
+    task queue to update the average moves remaining for active games.
      
  - **get_game**
     - Path: 'game/{urlsafe_game_key}'
