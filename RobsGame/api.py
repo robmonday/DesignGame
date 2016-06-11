@@ -23,7 +23,7 @@ MAKE_MOVE_REQUEST = endpoints.ResourceContainer(MakeMoveForm,
     urlsafe_game_key=messages.StringField(1),)
 USER_REQUEST = endpoints.ResourceContainer(user_name=messages.StringField(1),
                                            email=messages.StringField(2))
-CANCEL_GAME_REQUEST = endpoints.ResourceContainer(
+CANCEL_GAME_REQUEST = endpoints.ResourceContainer( #slightly different from MAKE_MOVE_REQUEST since it omits MakeMoveForm, which is not necessary
     urlsafe_game_key=messages.StringField(1),)
 
 MEMCACHE_MOVES_REMAINING = 'MOVES_REMAINING'
