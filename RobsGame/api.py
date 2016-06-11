@@ -104,14 +104,13 @@ class HangmanApi(remote.Service):
         if game.game_over:
             return game.to_form('Game already over!')
 
-        game.attempts_remaining -= 1
-
         try:
           index_var = game.remaining_letters.index(request.guess)
           game.remaining_letters.pop(index_var)
           msg = 'You got a letter! ' 
         except:
           msg = 'Not a correct guess. '
+          game.attempts_remaining -= 1
 
         if len(game.remaining_letters) < 1:
           game.end_game(won=True, cancelled=False)
